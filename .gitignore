@@ -1,0 +1,13 @@
+# exclude everything
+*
+
+
+# except source files
+!.gitignore
+!*/
+!*.cpp
+!*.h
+!*.lua
+!*.glsl
+!*.txt
+!README.md
