@@ -4,3 +4,6 @@
 [submodule "vendor/glad"]
 	path = vendor/glad
 	url = https://github.com/ebanjo-2/glad.git
+[submodule "vendor/openal"]
+	path = vendor/openal
+	url = https://github.com/ebanjo-2/openal
