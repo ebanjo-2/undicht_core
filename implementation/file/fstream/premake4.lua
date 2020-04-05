@@ -1,12 +1,12 @@
-project "video_opengl_33"
+project "fstream_file"
     
     kind "SharedLib" 
 
-    files { "src/**.*", "../../../vendor/glad/undicht/**.*" }
+    files { "src/**.*" }
     
     links { "core" }
 
-    includedirs { "../../../include", "src", "../../../vendor/glad/undicht" }
+    includedirs { "../../../include", "src" }
 	
 	configuration "debug - linux"
 		flags { "Symbols" }

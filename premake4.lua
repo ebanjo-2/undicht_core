@@ -1,5 +1,12 @@
 -- the premake4 file used to build the undicht core project
 
+solution "undicht_core"
+	
+    language "C++"
+    buildoptions "-std=c++11"
+    configurations { "debug - windows","debug - linux", "release - windows", "release - linux" }
+
+
 
 -- the project for the classes used to load the other core libraries
 
@@ -30,4 +37,5 @@ project "core"
 include "implementation/graphics/opengl_33"
 include "implementation/window/glfw"
 include "implementation/audio/openal"
+include "implementation/file/fstream"
     
