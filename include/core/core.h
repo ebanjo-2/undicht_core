@@ -21,11 +21,13 @@ namespace undicht {
                 static SharedLib s_window_lib;
                 static SharedLib s_video_lib;
                 static SharedLib s_audio_lib;
+                static SharedLib s_file_lib;
 
 
                 static std::string s_window_lib_path;
                 static std::string s_video_lib_path;
                 static std::string s_audio_lib_path;
+                static std::string s_file_lib_path;
 
                 static std::chrono::high_resolution_clock::time_point s_startup_time;
 
@@ -33,10 +35,10 @@ namespace undicht {
             public:
 
                 // tells the core which libraries it should initialize with
-                static void setLibraryPaths(const std::string& window, const std::string& video, const std::string& audio);
+                static void setLibraryPaths(const std::string& window, const std::string& video, const std::string& audio, const std::string& file);
 
                 // initializes the shared libraries
-                static void initialize();
+                static void initialize(bool init_window = true, bool init_graphics = true, bool init_audio = true, bool init_file = true);
 
                 // closes shared libraries
                 static void terminate();
