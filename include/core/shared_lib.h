@@ -8,7 +8,7 @@
 
 
 // different compilers use different functions to load dlls
-// but the main EventLoggeric is pretty much the same
+// but the main logic is pretty much the same
 
 #if defined(unix) || defined(__unix__) || defined(__unix)
     // functions that should be imported from the lib should be marked with SHARED_LIB_EXPORT
@@ -59,7 +59,7 @@ namespace undicht {
                 /** a class representing a shared library (i.e. .dll or .so)
                 * and providing an interface to load functions from the library
                 * if you want to load objects, use a function that creates one with new in the shared lib
-                * and returns it (you should also use a function to delete it) */
+                * and returns it (you should also use a function to delete it + one to copy it) */
 
             public:
 

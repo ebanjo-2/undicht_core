@@ -1,4 +1,5 @@
 #include <file/file.h>
+#include <iostream>
 
 
 namespace undicht {
@@ -25,7 +26,6 @@ namespace undicht {
 
         SHARED_LIB_API_IMPL(bool File::open(const std::string& file_name)) {
             /// opens a file from the hard drive
-
             m_shared_lib_object->open(file_name);
         }
 

@@ -32,26 +32,20 @@ namespace undicht {
 
                 m_file_name = file_name;
 
-                // checking if the file already exists
-                // source https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
-                struct stat buffer;
-
-                if((stat (file_name.c_str(), &buffer) == 0)) {
-
-                    m_file_size = -1; // not open
-                    return false;
-                }
-
                 // opening the file
                 m_file_stream.open(file_name); // open for both input and output
 
+                if(m_file_stream.fail()) {
+
+                    return false;
+                }
 
                 // getting the size of the file opened
                 m_file_stream.seekg(std::fstream::end);
                 m_file_size = getPosition();
                 setPosition(0);
 
-                return false;
+                return true;
             }
 
 
@@ -65,6 +59,7 @@ namespace undicht {
             void File::createFile() {
                 /// initializes a File with the file_name provided with the open() function
 
+                // dont think this would work
                 if(!m_file_stream.is_open()) {
 
                     // creating the file
