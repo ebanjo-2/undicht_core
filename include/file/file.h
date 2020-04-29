@@ -28,7 +28,7 @@ namespace undicht {
             virtual void deleteFile();
 
             /// @return the name of the file opened
-            virtual const std::string& getName() const;
+            virtual const std::string& getFileName() const;
 
         public:
             // reading from the file

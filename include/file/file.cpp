@@ -54,10 +54,10 @@ namespace undicht {
         }
 
 
-        SHARED_LIB_API_IMPL(const std::string& File::getName() const) {
+        SHARED_LIB_API_IMPL(const std::string& File::getFileName() const) {
             /// @return the name of the file opened
 
-            return m_shared_lib_object->getName();
+            return m_shared_lib_object->getFileName();
         }
 
 

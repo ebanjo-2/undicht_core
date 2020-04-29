@@ -89,7 +89,7 @@ namespace undicht {
             }
 
 
-            const std::string& File::getName() const {
+            const std::string& File::getFileName() const {
                 /// @return the name of the file opened
 
                 return m_file_name;
