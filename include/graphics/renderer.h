@@ -31,6 +31,7 @@ namespace undicht {
 
             // clears the content of the currently submitted framebuffer
             virtual void clearFramebuffer(float r = 0.1, float g = 0.2, float b = 0.3, float alpha = 1);
+
             virtual void draw(unsigned int instance_count = 1);
 
             static void setViewport(int width, int height, int offset_x = 0, int offset_y = 0);
