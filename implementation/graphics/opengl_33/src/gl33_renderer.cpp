@@ -14,6 +14,11 @@ namespace undicht {
             bool Renderer::s_depth_test_enabled = false;
             bool Renderer::s_culling_enabled = false;
 
+            int Renderer::s_viewport_width = 0;
+            int Renderer::s_viewport_height = 0;
+            int Renderer::s_viewport_offset_x = 0;
+            int Renderer::s_viewport_offset_y = 0;
+
             Renderer::Renderer() {
                 //ctor
             }
@@ -49,12 +54,20 @@ namespace undicht {
 
             void Renderer::clearFramebuffer(float r, float g, float b, float alpha) {
 
-                if(m_current_fbo){
+                if(m_current_fbo) {
                     m_current_fbo->clearAttachments();
                 } else {
                     FrameBuffer::bind(0);
                     glClearColor(r,g,b,alpha);
-                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                    if(s_depth_test_enabled) {
+
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                    } else {
+
+                        glClear(GL_COLOR_BUFFER_BIT);
+                    }
+
                 }
 
 
@@ -99,12 +112,16 @@ namespace undicht {
 
             }
 
-            void Renderer::setViewport(int width, int height, int offset_x, int offset_y){
+            void Renderer::setViewport(int width, int height, int offset_x, int offset_y) {
 
-                glViewport(offset_x, offset_y, width, height);
+                if((width != s_viewport_width) || (height != s_viewport_height) || (offset_x != s_viewport_offset_x) || (offset_y != s_viewport_offset_y)) {
+
+                    glViewport(offset_x, offset_y, width, height);
+
+                }
             }
 
-            void Renderer::enableDepthTest(bool enable){
+            void Renderer::enableDepthTest(bool enable) {
 
 
                 if(s_depth_test_enabled != enable) {
@@ -122,7 +139,7 @@ namespace undicht {
 
             }
 
-            void Renderer::enableBackFaceCulling(bool enable){
+            void Renderer::enableBackFaceCulling(bool enable) {
 
                 if(s_culling_enabled != enable) {
 
@@ -138,9 +155,17 @@ namespace undicht {
             }
 
 
+            void Renderer::getViewport(int& width, int& height, int& offset_x, int& offset_y) {
+
+                width = s_viewport_width;
+                height = s_viewport_height;
+                offset_x = s_viewport_offset_x;
+                offset_y = s_viewport_offset_y;
+
+            }
 
 
-                        /////////////////////////////////////////////////// opengl only functions //////////////////////////////////////////
+            /////////////////////////////////////////////////// opengl only functions //////////////////////////////////////////
 
 
             void Renderer::useFbo() {
@@ -177,19 +202,24 @@ namespace undicht {
 
             // static function callers
 
-            SHARED_LIB_EXPORT void setViewport(int width, int height, int offset_x, int offset_y){
+            SHARED_LIB_EXPORT void setViewport(int width, int height, int offset_x, int offset_y) {
 
                 Renderer::setViewport(width, height, offset_x, offset_y);
             }
 
-            SHARED_LIB_EXPORT void enableDepthTest(bool enable){
+            SHARED_LIB_EXPORT void enableDepthTest(bool enable) {
 
                 Renderer::enableDepthTest(enable);
             }
 
-            SHARED_LIB_EXPORT void enableBackFaceCulling(bool enable){
+            SHARED_LIB_EXPORT void enableBackFaceCulling(bool enable) {
 
                 Renderer::enableBackFaceCulling(enable);
+            }
+
+            SHARED_LIB_EXPORT void getViewport(int& width, int& height, int& offset_x, int& offset_y) {
+
+                Renderer::getViewport(width, height, offset_x, offset_y);
             }
 
 

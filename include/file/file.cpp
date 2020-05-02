@@ -95,6 +95,12 @@ namespace undicht {
             return m_shared_lib_object->getChar();
         }
 
+        SHARED_LIB_API_IMPL(std::string& File::getAll(std::string& loadTo)) {
+            /** reads the whole content of the file */
+
+            return m_shared_lib_object->getAll(loadTo);
+        }
+
 
         /////////////////////////////////// writing to the file ///////////////////////////////////
 

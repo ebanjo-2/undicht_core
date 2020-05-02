@@ -26,6 +26,11 @@ namespace undicht {
                     static bool s_depth_test_enabled;
                     static bool s_culling_enabled;
 
+                    static int s_viewport_width;
+                    static int s_viewport_height;
+                    static int s_viewport_offset_x;
+                    static int s_viewport_offset_y;
+
                 public:
                     // opengl only functions
 
@@ -41,10 +46,12 @@ namespace undicht {
                     virtual void clearFramebuffer(float r = 1, float g = 1, float b = 1, float alpha = 1);
                     virtual void draw(unsigned int instance_count = 1);
 
+                    /** redundand calls (with no changes) should be ignored */
                     static void setViewport(int width, int height, int offset_x = 0, int offset_y = 0);
                     static void enableDepthTest(bool enable = true);
                     static void enableBackFaceCulling(bool enable = true);
 
+                    static void getViewport(int& width, int& height, int& offset_x, int& offset_y);
 
                     Renderer();
                     virtual ~Renderer();

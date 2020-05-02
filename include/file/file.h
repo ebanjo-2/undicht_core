@@ -45,6 +45,9 @@ namespace undicht {
             /// @return the next character in the file
             virtual char getChar();
 
+            /** reads the whole content of the file */
+            virtual std::string& getAll(std::string& loadTo);
+
         public:
             // writing to the file
 

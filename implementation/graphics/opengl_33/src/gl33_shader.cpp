@@ -184,6 +184,11 @@ namespace undicht {
                 size_t geom_start = source.find("#geometry");
                 size_t source_end = source.size();
 
+                if((vert_start == std::string::npos) || (frag_start == std::string::npos)) {
+                    EventLogger::storeNote(Note(UND_ERROR, "SHADER:ERROR: failed to load shader src: no fragment or vertex shader", UND_CODE_ORIGIN));
+                    return;
+                }
+
                 if(geom_start != std::string::npos) {
                     geom_src = source.substr(geom_start + 9, source_end - geom_start - 9);
                 } else {

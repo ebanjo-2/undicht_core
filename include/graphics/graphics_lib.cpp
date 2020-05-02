@@ -60,6 +60,7 @@ namespace undicht {
             Renderer::s_set_viewport = (void(*)(int, int, int, int))Core::s_video_lib.getFunction("setViewport");
             Renderer::s_enable_depth_test = (void(*)(bool))Core::s_video_lib.getFunction("enableDepthTest");
             Renderer::s_enable_back_face_culling = (void(*)(bool))Core::s_video_lib.getFunction("enableBackFaceCulling");
+            Renderer::s_get_viewport = (void(*)(int&, int&, int&, int&))Core::s_video_lib.getFunction("getViewport");
 
         }
 

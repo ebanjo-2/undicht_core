@@ -36,14 +36,10 @@ namespace undicht {
                 m_file_stream.open(file_name); // open for both input and output
 
                 if(m_file_stream.fail()) {
-
                     return false;
                 }
 
-                // getting the size of the file opened
-                m_file_stream.seekg(std::fstream::end);
-                m_file_size = getPosition();
-                setPosition(0);
+                m_file_size = getSize();
 
                 return true;
             }
@@ -66,10 +62,7 @@ namespace undicht {
                     m_file_stream.open(m_file_name); // open for both input and output
 
 
-                    // getting the size of the file opened
-                    m_file_stream.seekg(std::fstream::end);
-                    m_file_size = getPosition();
-                    setPosition(0);
+                    m_file_size = 0;
 
                 }
 
@@ -152,6 +145,31 @@ namespace undicht {
             }
 
 
+            std::string& File::getAll(std::string& loadTo) {
+                /** reads the whole content of the file */
+
+                if(getSize() == (size_t)-1) {
+                    // file not open
+                    EventLogger::storeNote(Note(UND_ERROR, "failed to load file content: " + getFileName(), UND_CODE_ORIGIN));
+                    return loadTo;
+                }
+
+                size_t old_pos = getPosition();
+                setPosition(0);
+
+                char* buffer = new char[getSize()];
+
+                m_file_stream.read(buffer, getSize());
+                loadTo.insert(0, buffer, getSize());
+
+                delete[] buffer;
+
+                setPosition(old_pos);
+
+                return loadTo;
+            }
+
+
             //////////////////////////////////// writing to the file ////////////////////////////////////
 
 
@@ -196,6 +214,15 @@ namespace undicht {
 
             size_t File::getSize()  const {
                 /** @return the size of the file in bytes (equal to the number of characters) */
+
+                if(getFileName().compare("") && (m_file_size == (size_t)-1)) {
+                    // if the file size was not determined jet
+                    // source: https://stackoverflow.com/questions/5840148/how-can-i-get-a-files-size-in-c
+                    struct stat stat_buf;
+                    int rc = stat(getFileName().c_str(), &stat_buf);
+
+                    return rc == 0 ? stat_buf.st_size : -1;
+                }
 
                 return m_file_size;
             }

@@ -21,6 +21,8 @@ namespace undicht {
             static std::function<void(int,int,int,int)> s_set_viewport;
             static std::function<void(bool)> s_enable_depth_test;
             static std::function<void(bool)> s_enable_back_face_culling;
+            static std::function<void(int&,int&,int&,int&)> s_get_viewport;
+
             friend GraphicsLib;
 
         public:
@@ -34,11 +36,12 @@ namespace undicht {
 
             virtual void draw(unsigned int instance_count = 1);
 
+            /** redundand calls (with no changes) should be ignored */
             static void setViewport(int width, int height, int offset_x = 0, int offset_y = 0);
-
             static void enableDepthTest(bool enable = true);
-
             static void enableBackFaceCulling(bool enable = true);
+
+            static void getViewport(int& width, int& height, int& offset_x, int& offset_y);
 
             Renderer();
             virtual ~Renderer();

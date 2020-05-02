@@ -7,6 +7,8 @@ namespace undicht {
         std::function<void(int,int,int,int)> Renderer::s_set_viewport;
         std::function<void(bool)> Renderer::s_enable_depth_test;
         std::function<void(bool)> Renderer::s_enable_back_face_culling;
+        std::function<void(int&,int&,int&,int&)> Renderer::s_get_viewport;
+
 
         SHARED_LIB_DEF_BASE_CLASS(Renderer, createRenderer, copyRenderer, deleteRenderer)
 
@@ -49,6 +51,10 @@ namespace undicht {
 
         SHARED_LIB_API_IMPL(void Renderer::enableBackFaceCulling(bool enable)) {
             s_enable_back_face_culling(enable);
+        }
+
+        SHARED_LIB_API_IMPL(void Renderer::getViewport(int& width, int& height, int& offset_x, int& offset_y)){
+            s_get_viewport(width, height, offset_x, offset_y);
         }
 
 
