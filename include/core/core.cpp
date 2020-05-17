@@ -59,7 +59,7 @@ const std::string core_file_path = getFilePath(UND_CODE_SRC_FILE, 2); // the fil
             Note::setStaticMessage("DLL ERROR 126", 126);
             Note::setStaticMessage("DLL ERROR 127 (failed to find procedure)", 127);
 
-
+            std::cout << "Core file path: " << core_file_path << "\n";
 
             if(init_window) s_window_lib.open(s_window_lib_path);
             if(init_graphics) s_video_lib.open(s_video_lib_path);

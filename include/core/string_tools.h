@@ -9,12 +9,13 @@ namespace undicht {
 
     namespace core {
 
+#define UND_CODE_SRC_FILE replaceAllChars(undicht::core::toStr(__FILE__), '\\', '/') /** on windows you might get '\' between directory names, which would break things */
+
         /** gives you a string containing data about
         * the location of the line this makro is used in
         * (file_path : line_number) */
-#define UND_CODE_ORIGIN undicht::core::toStr(__FILE__) + undicht::core::toStr(" : ") + undicht::core::toStr(__LINE__)
+#define UND_CODE_ORIGIN UND_CODE_SRC_FILE + undicht::core::toStr(" : ") + undicht::core::toStr(__LINE__)
 
-#define UND_CODE_SRC_FILE undicht::core::toStr(__FILE__)
 
         /** tries to convert everything into a string */
         template <typename T>
@@ -32,7 +33,8 @@ namespace undicht {
         * @param go_back: how many directories to cut at the end of the file path*/
         std::string getFilePath(std::string file_name, int go_back = 0);
 
-
+        /** @brief replace all chars with an other char */
+        std::string replaceAllChars(std::string str, char to_be_replaced, char replace_with);
 
 
     }
