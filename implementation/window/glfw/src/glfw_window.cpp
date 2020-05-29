@@ -89,11 +89,43 @@ namespace undicht {
 
             void Window::setWindowMode(bool fullscreen, bool windowed) {
                 // still to be done
-                if(windowed){
-                    m_window = glfwCreateWindow(m_width, m_height, m_title.data(), NULL, NULL);
+
+                if(windowed) {
+
+                    if(fullscreen) {
+                        // window without border the size of the screen
+
+                        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+                        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+                        glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+
+                    } else {
+                        // window with default borders
+
+                        glfwSetWindowMonitor(m_window, 0, 0, 0, m_width, m_height, 0);
+
+                    }
+
                 } else {
-                    m_window = glfwCreateWindow(m_width, m_height, m_title.data(), glfwGetPrimaryMonitor(), NULL);
+
+                    if(fullscreen) {
+                        // true fullscreen mode
+
+                        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+                        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+                        glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+
+                    } else {
+                        // borderless window, keeping the size
+                        // not sure how to do this (after approx. 30 sec of research i couldnt find an easy result)
+                    }
+
                 }
+
             }
 
             void Window::setCursorVisible(bool visible) {
