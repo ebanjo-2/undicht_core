@@ -12,12 +12,12 @@ namespace undicht {
         namespace glfw {
 
             std::array<int, 8> MouseInputWatcher::s_mouse_buttons;
-            int MouseInputWatcher::s_cursor_offset_x;
-            int MouseInputWatcher::s_cursor_offset_y;
-            int MouseInputWatcher::s_cursor_x;
-            int MouseInputWatcher::s_cursor_y;
-            int MouseInputWatcher::s_cursor_last_x;
-            int MouseInputWatcher::s_cursor_last_y;
+            int MouseInputWatcher::s_cursor_offset_x = 0;
+            int MouseInputWatcher::s_cursor_offset_y = 0;
+            int MouseInputWatcher::s_cursor_x = 0;
+            int MouseInputWatcher::s_cursor_y = 0;
+            int MouseInputWatcher::s_cursor_last_x = 0;
+            int MouseInputWatcher::s_cursor_last_y = 0;
             bool first_mouse = true;
 
 
@@ -31,6 +31,12 @@ namespace undicht {
                 MouseInputWatcher::s_cursor_x = xpos;
                 MouseInputWatcher::s_cursor_y = ypos;
 
+                if(first_mouse) {
+                    // the first time a position is known
+                    MouseInputWatcher::s_cursor_last_x = MouseInputWatcher::s_cursor_x;
+                    MouseInputWatcher::s_cursor_last_y = MouseInputWatcher::s_cursor_y;
+                    first_mouse = false;
+                }
             }
 
             void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
@@ -118,13 +124,6 @@ namespace undicht {
             void MouseInputWatcher::updateCursorOffset() {
                 /** calculates the distance moved by the cursor
                 * since the last call to this function */
-
-                if(first_mouse) {
-                    //no offset at the first time the mouse position is determined
-                    MouseInputWatcher::s_cursor_last_x = s_cursor_x;
-                    MouseInputWatcher::s_cursor_last_y = s_cursor_y;
-                    first_mouse = false;
-                }
 
                 s_cursor_offset_x = s_cursor_x - s_cursor_last_x;
                 s_cursor_offset_y = s_cursor_y - s_cursor_last_y;
