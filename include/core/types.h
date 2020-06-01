@@ -11,6 +11,8 @@ namespace undicht {
     /** @return the size of the type in bytes */
     int getSizeOfType(int type);
 
+    int getNumberOfComponents(int type);
+
     const extern int UND_TYPE_UNAVAILABLE;
 
     // primitive data types

@@ -92,6 +92,30 @@ namespace undicht {
             return 0;
         }
 
+        int getNumberOfComponents(int type) {
+            /** @return the number of single types used in the type
+            * @example : UND_VEC3F consists of 3 floats, so @return would be 3 */
+
+            if(type == UND_INT)
+                return 1;
+            if(type == UND_FLOAT)
+                return 1;
+            if(type == UND_VEC4F)
+                return 4;
+            if(type == UND_VEC3F)
+                return 3; // 3 float vector
+            if(type == UND_VEC3I)
+                return 3; // 3 int vector
+            if(type == UND_VEC2F)
+                return 2; // 2 float vector
+            if(type == UND_MAT4F)
+                return 16; // 4 * 4 float matrix
+            if(type == UND_MAT3F)
+                return 9; // 3 * 3 float matrix
+
+            return 0;
+        }
+
 
     } // core
 
