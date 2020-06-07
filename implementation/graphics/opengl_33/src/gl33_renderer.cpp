@@ -102,11 +102,24 @@ namespace undicht {
 
                 if(instance_count == 1) {
 
-                    glDrawArrays(GL_TRIANGLES, 0, m_current_vbo->getSize() / m_current_vbo->getVertexSize());
+                    if(m_current_vbo->getUsesIndices()) {
+
+                        glDrawElements(GL_TRIANGLES, m_current_vbo->getIndexBufferSize() / sizeof(int), GL_UNSIGNED_INT, 0);
+                    } else {
+
+                        glDrawArrays(GL_TRIANGLES, 0, m_current_vbo->getSize() / m_current_vbo->getVertexSize());
+                    }
+
 
                 } else {
 
-                    glDrawArraysInstanced(GL_TRIANGLES, 0, m_current_vbo->getSize() / m_current_vbo->getVertexSize(), instance_count);
+                    if(m_current_vbo->getUsesIndices()) {
+                        // has not been tested
+                        glDrawElementsInstanced(GL_TRIANGLES, m_current_vbo->getIndexBufferSize() / sizeof(int), GL_UNSIGNED_INT, 0, instance_count);
+                    } else {
+
+                        glDrawArraysInstanced(GL_TRIANGLES, 0, m_current_vbo->getSize() / m_current_vbo->getVertexSize(), instance_count);
+                    }
 
                 }
 

@@ -25,12 +25,15 @@ namespace undicht {
                 //ctor
 
                 unsigned int temp_vbo;
+                unsigned int temp_ebo;
                 unsigned int temp_vao;
 
                 glGenBuffers(1, &temp_vbo);
+                glGenBuffers(1, &temp_ebo);
                 glGenVertexArrays(1, &temp_vao);
 
                 m_vbo_id.setID(temp_vbo);
+                m_ebo_id.setID(temp_ebo);
                 m_vao_id.setID(temp_vao);
 
                 bind();
@@ -38,15 +41,22 @@ namespace undicht {
 
             VertexBuffer::~VertexBuffer() {
 
-                if(m_vbo_id.removeUser()){
+                if(m_vbo_id.removeUser()) {
                     glDeleteBuffers(1, &m_vbo_id.m_id);
                 }
 
-                if(m_vao_id.removeUser()){
+                if(m_ebo_id.removeUser()) {
+                    glDeleteBuffers(1, &m_ebo_id.m_id);
+                }
+
+                if(m_vao_id.removeUser()) {
                     glDeleteVertexArrays(1, &m_vao_id.m_id);
                 }
 
             }
+
+            ////////////////////////////////////////// vertex data //////////////////////////////////////////
+
 
             void VertexBuffer::setData(const std::vector<float>& data, unsigned int offset) {
 
@@ -67,6 +77,21 @@ namespace undicht {
                 undCheckGLError(UND_CODE_ORIGIN);
 
             }
+
+            void VertexBuffer::getData(std::vector<float>& data, unsigned int num_floats, unsigned int offset) {
+
+                undCheckGLError(UND_CODE_ORIGIN);
+            }
+
+            void VertexBuffer::getData(void* data, unsigned int size, unsigned int offset) {
+                /// data should have at least #size bytes reserved
+
+                undCheckGLError(UND_CODE_ORIGIN);
+            }
+
+            /////////////////////////////////////// additional vertex related data ////////////////////////////////////////////
+
+
 
             void VertexBuffer::setLayout(const core::BufferLayout& layout) {
 
@@ -117,16 +142,6 @@ namespace undicht {
                 undCheckGLError(UND_CODE_ORIGIN);
             }
 
-            void VertexBuffer::getData(std::vector<float>& data, unsigned int num_floats, unsigned int offset) {
-
-                undCheckGLError(UND_CODE_ORIGIN);
-            }
-
-            void VertexBuffer::getData(void* data, unsigned int size, unsigned int offset) {
-                /// data should have at least #size bytes reserved
-
-                undCheckGLError(UND_CODE_ORIGIN);
-            }
 
             unsigned int VertexBuffer::getSize() {
                 /// returns the number of bytes stored in the buffer
@@ -145,6 +160,62 @@ namespace undicht {
                 /// returns the layout of the stored data
 
                 return m_layout;
+            }
+
+            ////////////////////////////////////////////////// indices //////////////////////////////////////////////////
+
+
+            void VertexBuffer::setIndexData(const std::vector<int>& data, unsigned int offset) {
+
+                setIndexData(data.data(), data.size() * sizeof(int), offset);
+            }
+
+
+            void VertexBuffer::setIndexData(const void* data, unsigned int size, unsigned int offset) {
+
+                if(offset + size > getIndexBufferSize()) {
+
+                    resizeIndexBuffer(offset + size);
+                }
+
+                bind();
+                glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
+
+                setUsesIndices(true);
+                undCheckGLError(UND_CODE_ORIGIN);
+
+            }
+
+            void VertexBuffer::getIndexData(std::vector<int>& data, unsigned int num_indices, unsigned int offset) {
+
+                // to be implemented
+            }
+
+            void VertexBuffer::getIndexData(void* data, unsigned int size, unsigned int offset) {
+                /// data should have at least #size bytes reserved
+
+                // to be implemented
+            }
+
+
+            /////////////////////////////////////// additional index related data ///////////////////////////////////////
+
+            unsigned int VertexBuffer::getIndexBufferSize() {
+                /// returns the number of bytes stored in the indices buffer
+
+                return m_indices_size;
+            }
+
+
+            void VertexBuffer::setUsesIndices(bool use_indices) {
+
+                m_uses_indices = use_indices;
+            }
+
+
+            bool VertexBuffer::getUsesIndices() {
+
+                return m_uses_indices;
             }
 
             /// non api functions ///
@@ -182,18 +253,51 @@ namespace undicht {
                 undCheckGLError(UND_CODE_ORIGIN);
             }
 
+            void VertexBuffer::resizeIndexBuffer(unsigned int size) { // taken and modified from the old opengl abstraction
+                /**@param the size is in bytes */
+                /**@brief reserves buffer memory by calling setData()
+                * old data does not get moved */
+
+
+                // saving the data
+                unsigned char* old_data = new unsigned char[getIndexBufferSize()];
+                unsigned int old_data_size = getIndexBufferSize();
+
+                getIndexData(old_data, getIndexBufferSize(), 0);
+
+                // resizing the buffer and restoring the data
+                if(getIndexBufferSize() < size) {
+                    // increasing the size of the buffer (old_data not big enough)
+
+                    bind();
+                    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, 0, GL_STATIC_DRAW);
+                    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, old_data_size, old_data);
+
+                } else {
+                    // decreasing the size of the buffer (old_data big enough)
+
+                    bind();
+                    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, old_data, GL_STATIC_DRAW);
+                }
+
+                m_indices_size = size;
+                delete[] old_data;
+
+                undCheckGLError(UND_CODE_ORIGIN);
+            }
+
             void VertexBuffer::bind() {
 
                 if(bound_vao != m_vao_id) {
 
                     glBindVertexArray(m_vao_id);
                     glBindBuffer(GL_ARRAY_BUFFER, m_vbo_id);
+                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo_id);
                     bound_vao = m_vao_id;
 
                 }
 
             }
-
 
 
             SHARED_LIB_EXPORT implementation::VertexBuffer* createVertexBuffer() {
@@ -206,11 +310,15 @@ namespace undicht {
                 // to be done properly
                 VertexBuffer* c_vertex_buffer = (VertexBuffer*)c;
 
-                if(c_vertex_buffer->m_vbo_id.removeUser()){
+                if(c_vertex_buffer->m_vbo_id.removeUser()) {
                     glDeleteBuffers(1, &c_vertex_buffer->m_vbo_id.m_id);
                 }
 
-                if(c_vertex_buffer->m_vao_id.removeUser()){
+                if(c_vertex_buffer->m_ebo_id.removeUser()) {
+                    glDeleteBuffers(1, &c_vertex_buffer->m_ebo_id.m_id);
+                }
+
+                if(c_vertex_buffer->m_vao_id.removeUser()) {
                     glDeleteVertexArrays(1, &c_vertex_buffer->m_vao_id.m_id);
                 }
 
@@ -229,4 +337,3 @@ namespace undicht {
     } // graphics
 
 } //undicht
-

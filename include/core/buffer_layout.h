@@ -14,7 +14,7 @@ namespace undicht {
 
                 std::vector<int> m_types; /// the primitive types that the stored struct is made out of
 
-                unsigned int getTotalSize(); /// returns the sum of the size of all the primtive types in m_types
+                unsigned int getTotalSize() const; /// returns the sum of the size of all the primtive types in m_types
 
                 BufferLayout() {}
                 BufferLayout(const std::vector<int>& types) : m_types(types) {}

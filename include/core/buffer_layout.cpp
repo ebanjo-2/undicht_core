@@ -5,12 +5,12 @@ namespace undicht {
 
     namespace core {
 
-        unsigned BufferLayout::getTotalSize() {
+        unsigned BufferLayout::getTotalSize() const{
 
 
             unsigned int total_size = 0;
 
-            for(int& type : m_types ) {
+            for(const int& type : m_types ) {
 
                 total_size += getSizeOfType(type);
 
