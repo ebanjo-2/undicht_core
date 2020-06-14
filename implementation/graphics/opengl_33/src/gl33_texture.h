@@ -22,6 +22,10 @@ namespace undicht {
                     unsigned int m_depth = 0;
                     int m_type = 0;
 
+                    int m_mag_filter = -1;
+                    int m_min_filter = -1;
+                    int m_wrapping_method = -1;
+
                     int m_pixel_layout; // like rgb, rgba
                     int m_memory_format; // stores how big each component of the pixel is
 
@@ -46,6 +50,12 @@ namespace undicht {
                     * may speed up the scaling of the texture, i.e. when applied to a 3d object
                     * but also uses more vram, so dont use it if u dont want to scale the texture */
                     virtual void setUsesMipMap(bool use_mip_map);
+
+                    /// how to retrieve color from the texture if it doesnt align with the pixels on the screen
+                    virtual void setFilteringMethod(int min_filter, int mag_filter);
+
+                    /// what to do if color data is requested outside the range of 0-1 for uv components
+                    virtual void setWrappingMethod(int method);
 
                 public:
                     // managing the textures data
@@ -85,6 +95,10 @@ namespace undicht {
 
                     void setOpenglFormat(const std::array<int,4>& component_types);
                     void setOpenglFormat(int layout, int memory_format); // directly setting the format
+
+                    /// translates an undicht filtering type to an opengl one
+                    int getGLFilteringMethod(int und_filtering_method);
+
 
                 public:
 

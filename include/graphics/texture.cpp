@@ -41,6 +41,20 @@ namespace undicht {
             m_shared_lib_object->setUsesMipMap(use_mip_map);
         }
 
+
+        SHARED_LIB_API_IMPL(void Texture::setFilteringMethod(int min_filter, int mag_filter)) {
+            /// how to retrieve color from the texture if it doesnt align with the pixels on the screen
+
+            m_shared_lib_object->setFilteringMethod(min_filter, mag_filter);
+        }
+
+
+        SHARED_LIB_API_IMPL(void Texture::setWrappingMethod(int method)) {
+            /// what to do if color data is requested outside the range of 0-1 for uv components
+
+            m_shared_lib_object->setWrappingMethod(method);
+        }
+
         ///////////////////////////////////////// managing the textures data //////////////////////////////////////////
 
 

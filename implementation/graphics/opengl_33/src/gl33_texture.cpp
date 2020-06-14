@@ -72,6 +72,38 @@ namespace undicht {
 
             }
 
+            void Texture::setFilteringMethod(int min_filter, int mag_filter) {
+                /// how to retrieve color from the texture if it doesnt align with the pixels on the screen
+
+                bind();
+
+                m_min_filter = min_filter;
+                m_mag_filter = mag_filter;
+
+                glTexParameteri(m_type, GL_TEXTURE_MIN_FILTER, getGLFilteringMethod(min_filter));
+                glTexParameteri(m_type, GL_TEXTURE_MAG_FILTER, getGLFilteringMethod(mag_filter));
+
+            }
+
+            void Texture::setWrappingMethod(int method) {
+                /// what to do if color data is requested outside the range of 0-1 for uv components
+
+                bind();
+
+                int gl_method = GL_REPEAT;
+
+                if(method == UND_REPEAT) {
+                    gl_method == GL_REPEAT;
+                } else if (method == UND_CLAMP_TO_EDGE) {
+                    gl_method == GL_CLAMP_TO_EDGE;
+                }
+
+                glTexParameteri(m_type, GL_TEXTURE_WRAP_S, gl_method);
+                glTexParameteri(m_type, GL_TEXTURE_WRAP_T, gl_method);
+                glTexParameteri(m_type, GL_TEXTURE_WRAP_R, gl_method);
+
+            }
+
             ///////////////////////////////////////// managing the textures data //////////////////////////////////////////
 
 
@@ -105,7 +137,7 @@ namespace undicht {
 
             void Texture::generateMipMaps() {
 
-                glBindTexture(m_type, m_id);
+                bind();
                 glGenerateMipmap(m_type);
 
             }
@@ -150,26 +182,28 @@ namespace undicht {
                         // 2D texture
 
                         m_type = GL_TEXTURE_2D;
-                        glBindTexture(m_type, m_id);
+                        bind();
                         glTexImage2D(GL_TEXTURE_2D, 0, m_memory_format, m_width, m_height, 0, m_pixel_layout, GL_UNSIGNED_BYTE, NULL);
 
                     } else {
                         // texture array / 3d texture / cubemap
 
                         m_type = GL_TEXTURE_2D_ARRAY;
-                        glBindTexture(m_type, m_id);
+                        bind();
 
                         // glTexStorage3D(m_type, 1, m_memory_format, m_width, m_height, m_depth); // might require opengl 4.2 or higher
                         glTexImage3D(m_type, 0, m_memory_format, m_width, m_height, m_depth, 0, m_pixel_layout, GL_UNSIGNED_BYTE, 0);
 
                     }
 
-                    glTexParameteri(m_type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                    glTexParameteri(m_type, GL_TEXTURE_WRAP_T, GL_REPEAT);
-                    glTexParameteri(m_type, GL_TEXTURE_WRAP_R, GL_REPEAT);
+                    if(m_wrapping_method == -1) {
+                        setWrappingMethod(UND_REPEAT);
+                    }
 
-                    glTexParameteri(m_type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                    glTexParameteri(m_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    if((m_mag_filter == -1) || (m_min_filter == -1)) {
+                        setFilteringMethod(UND_LINEAR, UND_LINEAR);
+                    }
+
                     undCheckGLError(UND_CODE_ORIGIN);
 
                 }
@@ -241,6 +275,17 @@ namespace undicht {
 
                 m_layout_set = true;
                 updateFormat();
+            }
+
+            int Texture::getGLFilteringMethod(int und_filtering_method) {
+                /// translates an undicht filtering type to an opengl one
+
+                if(und_filtering_method == UND_NEAREST) {
+                    return GL_NEAREST;
+                } else if (und_filtering_method == UND_LINEAR) {
+                    return GL_LINEAR;
+                }
+
             }
 
             //////////////////// functions to load a texture object from the shared lib  ////////////////////////////////////

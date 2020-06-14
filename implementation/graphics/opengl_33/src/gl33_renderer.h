@@ -31,6 +31,8 @@ namespace undicht {
                     static int s_viewport_offset_x;
                     static int s_viewport_offset_y;
 
+                    static int s_texture_filtering;
+
                 public:
                     // opengl only functions
 

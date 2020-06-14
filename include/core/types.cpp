@@ -38,6 +38,13 @@ namespace undicht {
         const int UND_KEY_PRESSED = 1;
         const int UND_KEY_REPEATED = 2; // pressed for a longer time
 
+        // texture parameters
+        const int UND_NEAREST = 0; // filtering
+        const int UND_LINEAR = 1;
+
+        const int UND_REPEAT = 0; // wrapping
+        const int UND_CLAMP_TO_EDGE = 1;
+
         // attachments for Framebuffers
         /*const int UND_COLOR_RG_ATTACHMENT = 0;
         const int UND_COLOR_RGB_ATTACHMENT = 1;

@@ -95,10 +95,13 @@ namespace undicht {
                     return;
                 }
 
+                if(!m_current_vbo->getVertexSize()) {
+
+                    EventLogger::storeNote(Note(UND_ERROR, "ERROR: draw call failed, vertex buffer has no layout", UND_CODE_ORIGIN));
+                    return;
+                }
+
                 useFbo();
-
-                // std::cout << "drawing " << m_current_vbo->getSize() / m_current_vbo->getVertexSize() << " vertices" << "\n";
-
 
                 if(instance_count == 1) {
 
@@ -115,6 +118,7 @@ namespace undicht {
 
                     if(m_current_vbo->getUsesIndices()) {
                         // has not been tested
+
                         glDrawElementsInstanced(GL_TRIANGLES, m_current_vbo->getIndexBufferSize() / sizeof(int), GL_UNSIGNED_INT, 0, instance_count);
                     } else {
 
@@ -229,6 +233,7 @@ namespace undicht {
 
                 Renderer::enableBackFaceCulling(enable);
             }
+
 
             SHARED_LIB_EXPORT void getViewport(int& width, int& height, int& offset_x, int& offset_y) {
 

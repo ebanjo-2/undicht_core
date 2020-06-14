@@ -2,6 +2,7 @@
 #define STRING_TOOLS_H_INCLUDED
 
 #include <sstream>
+#include <vector>
 
 // some simple string tools
 
@@ -36,6 +37,16 @@ namespace undicht {
         /** @brief replace all chars with an other char */
         std::string replaceAllChars(std::string str, char to_be_replaced, char replace_with);
 
+
+        /**@brief float arrays might be stored as chars in a text file, this functions converts them to floats
+        * @param num is the number of floats to extract
+        * @param stride is the distance in chars between each float, default is 1 (example: " ")*/
+        void extractFloatArray(std::vector<float> &loadTo, std::string src, unsigned int num, int stride = 1);
+
+        /**@brief extract ints from a char array
+        * @param num is the number of ints to extract
+        * @param stride is the distance in chars between each int, default is 1 (example: " ") */
+        void extractIntArray(std::vector<int> &loadTo, std::string src, unsigned int num, int stride = 1);
 
     }
 

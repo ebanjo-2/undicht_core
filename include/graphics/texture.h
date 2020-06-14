@@ -33,6 +33,12 @@ namespace undicht {
             * but also uses more vram, so dont use it if u dont want to scale the texture */
             virtual void setUsesMipMap(bool use_mip_map);
 
+            /// how to retrieve color from the texture if it doesnt align with the pixels on the screen
+            virtual void setFilteringMethod(int min_filter, int mag_filter);
+
+            /// what to do if color data is requested outside the range of 0-1 for uv components
+            virtual void setWrappingMethod(int method);
+
         public:
             // managing the textures data
 

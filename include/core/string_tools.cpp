@@ -1,4 +1,6 @@
 #include "string_tools.h"
+#include <stdlib.h>
+
 
 namespace undicht {
 
@@ -55,6 +57,67 @@ namespace undicht {
             }
 
             return str;
+        }
+
+
+        void extractFloatArray(std::vector<float> &loadTo,std::string src, unsigned int num, int stride) {
+            /**@brief float arrays might be stored as chars in a text file, this functions converts them to floats */
+            /**@brief they should be only one char apart from each other though*/
+
+            // loadTo.clear();
+
+            src.push_back('X'); // making sure the extracting stops there
+            // while reading through the array of chars,
+            // this pointer points to the end of the last float extracted
+            char* reading_position = ((char*)src.data());
+            char* end_position = ((char*)src.data()) + src.size() - 1;
+
+            while(reading_position < end_position) {
+                // the strtof function will store the end of the extracted float in the char array as an pointer
+                // this way the reading position gets updated and moves forward
+                loadTo.push_back(strtof(reading_position, &reading_position));
+
+                if(loadTo.size() >= num) {
+                    break;
+                }
+
+                reading_position += stride;
+
+            }
+
+            src.pop_back(); // deleting the last char
+
+        }
+
+
+        void extractIntArray(std::vector<int> &loadTo, std::string src, unsigned int num, int stride) {
+            /**@brief extract ints from a char array*/
+            /** @warning might not work correctly if the src's length equals its capacity, so make sure there is (at least) one extra char */
+
+            // loadTo.clear();
+
+            src.push_back('X'); // making sure the extracting stops there
+            // while reading through the array of chars,
+            // this pointer points to the end of the last float extracted
+            char* reading_position = ((char*)src.data());
+            char* end_position = ((char*)src.data()) + src.size() - 1;
+
+            while(reading_position < end_position) {
+                // the strtof function will store the end of the extracted float in the char array as an pointer
+                // this way the reading position gets updated and moves forward
+                loadTo.push_back(strtol(reading_position, &reading_position, 0));
+
+                if(loadTo.size() >= num) {
+                    break;
+                }
+
+                reading_position += stride;
+
+            }
+
+            src.pop_back(); // deleting the last char
+
+
         }
 
     } // core

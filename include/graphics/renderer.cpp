@@ -53,6 +53,7 @@ namespace undicht {
             s_enable_back_face_culling(enable);
         }
 
+
         SHARED_LIB_API_IMPL(void Renderer::getViewport(int& width, int& height, int& offset_x, int& offset_y)){
             s_get_viewport(width, height, offset_x, offset_y);
         }
