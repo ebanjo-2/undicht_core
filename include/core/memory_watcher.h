@@ -15,6 +15,7 @@ namespace undicht {
                 // storing the user count of every object
 
                 static std::vector<int> s_user_count;
+                static std::vector<int> s_deleted_user_counts; // the user counts that reached 0 and now can be reused
 
             public:
                 // to keep track of where the user count is stored

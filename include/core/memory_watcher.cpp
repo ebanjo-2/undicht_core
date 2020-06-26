@@ -7,6 +7,7 @@ namespace undicht {
     namespace core {
 
         std::vector<int> MemoryWatcher::s_user_count;
+        std::vector<int> MemoryWatcher::s_deleted_user_counts;
 
 
         /////////////////////////////////////////// constructor / destructor /////////////////////////////////////////
@@ -65,17 +66,15 @@ namespace undicht {
 
 
             // looking for old user counts that can be reused
-            for(int i = 0; i < s_user_count.size(); i++) {
-                if(s_user_count.at(i) <= 0) {
-                    m_user_id = i;
-                    s_user_count.at(i) = 1;
-                    return;
-                }
+            if(s_deleted_user_counts.size()) {
+                m_user_id = s_deleted_user_counts.back();
+                s_user_count.at(m_user_id) = 1;
+                s_deleted_user_counts.pop_back();
+                return;
             }
 
             m_user_id = s_user_count.size();
             s_user_count.push_back(1);
-
 
         }
 
@@ -92,6 +91,10 @@ namespace undicht {
 
             if(s_user_count.size() > (unsigned int) m_user_id) {
                 s_user_count.at(m_user_id) -= 1;
+
+                if(!s_user_count.at(m_user_id)) // user count reached 0, can be reused
+                    s_deleted_user_counts.push_back(m_user_id);
+
             } else {
                 std::cout << "failed to delete user " << m_user_id << "\n";
                 std::cout << "user count does not exist " << "\n";
