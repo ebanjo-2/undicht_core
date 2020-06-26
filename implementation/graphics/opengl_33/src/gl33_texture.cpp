@@ -16,14 +16,16 @@ namespace undicht {
 
             Texture::Texture() {
 
-                glGenTextures(1, &m_id.m_id);
+                unsigned int id;
+                glGenTextures(1, &id);
+                m_id = id;
 
             }
 
             Texture::~Texture() {
 
                 if(m_id.removeUser()) {
-                    glDeleteTextures(1, &m_id.m_id);
+                    glDeleteTextures(1, &m_id.getID());
                 }
 
             }
@@ -299,7 +301,7 @@ namespace undicht {
                 Texture* c_texture = (Texture*)c;
 
                 if(c_texture->m_id.removeUser()) {
-                    glDeleteTextures(1, &c_texture->m_id.m_id);
+                    glDeleteTextures(1, &c_texture->m_id.getID());
                 }
 
                 *c_texture = *(Texture*)o;

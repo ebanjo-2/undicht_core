@@ -25,17 +25,15 @@ namespace undicht {
                     std::string m_name;
                     int m_type = core::UND_TYPE_UNAVAILABLE;
                     core::BufferLayout m_layout; // used only if the uniform stores a buffer
-                    char* m_data = 0;
+                    core::Shared<char*> m_data = 0;
                     bool m_data_copied = false;
-
-                    core::MemoryWatcher m_memory_watcher;
 
 
                 public:
 
                     /** the uniform stores a single type,
                     * see core/types.h for options */
-                    virtual void setData(const void* data, int type, bool copy_data = false);
+                    virtual void setData(const void* data, int type, bool copy_data = true);
 
                     /** stores the data in a buffer accessable in the shader */
                     virtual void setData(const void* data, core::BufferLayout layout, int num_of_elements);

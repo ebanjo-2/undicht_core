@@ -21,34 +21,14 @@ namespace undicht {
 
         void SharedID::setID(unsigned int id){
 
-            // removeUser should be called separately to delete the id object
-            createNewUserCount();
-            m_id = id;
-
+            setRef(id);
         }
 
-        unsigned int& SharedID::getID(){
+        const unsigned int& SharedID::getID(){
 
-            return m_id;
+            return getRef();
         }
 
-
-        bool SharedID::removeUser(){
-            /** to be called when an object referencing the id is destroyed
-            * @return true when the object being destroyed is the last one referencing the id */
-
-            return !deleteUser();
-        }
-
-        void SharedID::operator= (unsigned int id){
-
-            setID(id);
-        }
-
-        SharedID::operator unsigned int(){
-
-            return m_id;
-        }
 
     } // core
 

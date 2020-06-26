@@ -18,14 +18,16 @@ namespace undicht {
 
             FrameBuffer::FrameBuffer() : m_type(GL_FRAMEBUFFER) {
 
-                glGenFramebuffers(1, &m_id.m_id);
+                unsigned int id;
+                glGenFramebuffers(1, &id);
+                m_id = id;
 
             }
 
             FrameBuffer::~FrameBuffer() {
 
                 if(m_id.removeUser()) {
-                    glDeleteFramebuffers(1, &m_id.m_id);
+                    glDeleteFramebuffers(1, &m_id.getID());
                 }
             }
 
@@ -48,10 +50,12 @@ namespace undicht {
                 if(m_attachments.size()) {
 
                     if(m_id.removeUser()) {
-                        glDeleteFramebuffers(1, &m_id.m_id);
+                        glDeleteFramebuffers(1, &m_id.getID());
                     }
 
-                    glGenFramebuffers(1, &m_id.m_id);
+                    unsigned int id;
+                    glGenFramebuffers(1, &id);
+                    m_id = id;
                 }
 
                 // reattaching them to the new fbo

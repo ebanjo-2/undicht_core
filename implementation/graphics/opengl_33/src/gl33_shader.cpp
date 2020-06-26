@@ -122,10 +122,15 @@ namespace undicht {
                     // binding the texture and setting the sampler uniform in the shader
                     real_texture->bind();
                     int texture_id = getTextureID(real_texture->m_name);
+
+
                     graphics::Uniform u;
+
                     u.setData(&texture_id, UND_INT);
+
                     u.setName(real_texture->m_name);
                     loadUniform(u);
+
                 }
 
 

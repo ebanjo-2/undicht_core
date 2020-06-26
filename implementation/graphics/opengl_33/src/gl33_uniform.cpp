@@ -16,14 +16,14 @@ namespace undicht {
 
             Uniform::~Uniform() {
                 //dtor
-                if(m_memory_watcher.deleteUser()) {
-                    if(m_data && (!m_data_copied))
-                        delete[] m_data;
+
+                if(m_data && m_data_copied && m_data.removeUser()) {
+                    delete m_data.getRef();
+                    m_data = 0;
                 }
-                m_data = 0;
 
                 if(m_ubo_id.removeUser()) {
-                    glDeleteBuffers(1, &m_ubo_id.m_id);
+                    glDeleteBuffers(1, &m_ubo_id.getID());
                 }
             }
 
@@ -35,31 +35,42 @@ namespace undicht {
                 m_layout.m_types = std::vector<int>(type);
                 int type_size = core::getSizeOfType(type);
 
-                if(m_data && (!m_data_copied)) {
-                    if(m_memory_watcher.deleteUser())
-                        delete[] m_data;
-
-                }
-
                 if(copy_data) {
 
-                    if(core::getSizeOfType(m_type) != type_size) {
+                    //std::cout << "copying data" << "\n";
 
-                        m_memory_watcher.createNewUserCount();
-                        m_data = new char[type_size];
+                    if(core::getSizeOfType(m_type) != type_size) {
+                        // resizing the m_data buffer
+
+                        if(m_data.removeUser() && m_data){
+                            delete[] m_data.getRef();
+                        }
+
+                        char* data_buffer = new char[type_size];
+                        m_data.setRef(data_buffer);
 
                     }
 
-                    std::copy((char*)data, ((char*)data) + type_size, m_data);
+                    std::copy((char*)data, ((char*)data) + type_size, m_data.getRef());
 
                 } else {
+                    // removeUser() has to be called first here, otherwise the engine would be undicht
+                    if(m_data.removeUser() && m_data_copied && m_data) {
+                        delete[] m_data.getRef();
+                    }
 
-                    m_data = (char*)data;
+                    //std::cout << "storing reference" << "\n";
+
+                    // storing a reference to the data
+                    m_data.setRef((char*)data);
+
                 }
 
 
                 m_type = type;
                 m_data_copied = copy_data;
+
+                //std::cout << "done with setting uniform data" << "\n";
 
             }
 
@@ -102,7 +113,7 @@ namespace undicht {
 
             const void* Uniform::getData() const {
 
-                return m_data;
+                return m_data.getRef();
             }
 
             const core::BufferLayout& Uniform::getLayout() const {
@@ -123,10 +134,17 @@ namespace undicht {
 
                 Uniform* c_uniform = (Uniform*)c;
 
-                if(c_uniform->m_ubo_id.removeUser()){
-                    glDeleteBuffers(1, &c_uniform->m_ubo_id.m_id);
+                // clearing up the data left stored in the uniform to copy to
+                if(c_uniform->m_data && c_uniform->m_data_copied && c_uniform->m_data.removeUser()) {
+                    delete c_uniform->m_data.getRef();
+                    c_uniform->m_data = 0;
                 }
 
+                if(c_uniform->m_ubo_id.removeUser()) {
+                    glDeleteBuffers(1, &c_uniform->m_ubo_id.getID());
+                }
+
+                // doing the copying
                 *c_uniform = *(Uniform*)o;
             }
 

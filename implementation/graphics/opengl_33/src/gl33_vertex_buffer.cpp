@@ -42,15 +42,15 @@ namespace undicht {
             VertexBuffer::~VertexBuffer() {
 
                 if(m_vbo_id.removeUser()) {
-                    glDeleteBuffers(1, &m_vbo_id.m_id);
+                    glDeleteBuffers(1, &m_vbo_id.getID());
                 }
 
                 if(m_ebo_id.removeUser()) {
-                    glDeleteBuffers(1, &m_ebo_id.m_id);
+                    glDeleteBuffers(1, &m_ebo_id.getID());
                 }
 
                 if(m_vao_id.removeUser()) {
-                    glDeleteVertexArrays(1, &m_vao_id.m_id);
+                    glDeleteVertexArrays(1, &m_vao_id.getID());
                 }
 
             }
@@ -311,15 +311,15 @@ namespace undicht {
                 VertexBuffer* c_vertex_buffer = (VertexBuffer*)c;
 
                 if(c_vertex_buffer->m_vbo_id.removeUser()) {
-                    glDeleteBuffers(1, &c_vertex_buffer->m_vbo_id.m_id);
+                    glDeleteBuffers(1, &c_vertex_buffer->m_vbo_id.getID());
                 }
 
                 if(c_vertex_buffer->m_ebo_id.removeUser()) {
-                    glDeleteBuffers(1, &c_vertex_buffer->m_ebo_id.m_id);
+                    glDeleteBuffers(1, &c_vertex_buffer->m_ebo_id.getID());
                 }
 
                 if(c_vertex_buffer->m_vao_id.removeUser()) {
-                    glDeleteVertexArrays(1, &c_vertex_buffer->m_vao_id.m_id);
+                    glDeleteVertexArrays(1, &c_vertex_buffer->m_vao_id.getID());
                 }
 
                 *c_vertex_buffer = *(VertexBuffer*)o;

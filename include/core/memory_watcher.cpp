@@ -59,17 +59,24 @@ namespace undicht {
 
         void MemoryWatcher::createNewUserCount() {
             /** reserves a new user count & updates m_id
-            * should be called when the data to be watched over is initialized or chaged
+            * should be called when the data to be watched over is initialized or changed
             * when there was old data stored in the object it should also be checked if this data
             * has any users left */
 
 
+            // looking for old user counts that can be reused
+            for(int i = 0; i < s_user_count.size(); i++) {
+                if(s_user_count.at(i) <= 0) {
+                    m_user_id = i;
+                    s_user_count.at(i) = 1;
+                    return;
+                }
+            }
 
             m_user_id = s_user_count.size();
             s_user_count.push_back(1);
 
 
-            //std::cout << "created user count" << m_user_id << "\n";
         }
 
 
