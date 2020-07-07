@@ -84,7 +84,6 @@ namespace undicht {
 
                 glTexParameteri(m_type, GL_TEXTURE_MIN_FILTER, getGLFilteringMethod(min_filter));
                 glTexParameteri(m_type, GL_TEXTURE_MAG_FILTER, getGLFilteringMethod(mag_filter));
-
             }
 
             void Texture::setWrappingMethod(int method) {
@@ -283,8 +282,10 @@ namespace undicht {
                 /// translates an undicht filtering type to an opengl one
 
                 if(und_filtering_method == UND_NEAREST) {
+
                     return GL_NEAREST;
                 } else if (und_filtering_method == UND_LINEAR) {
+
                     return GL_LINEAR;
                 }
 
