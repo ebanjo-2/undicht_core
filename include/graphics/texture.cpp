@@ -6,6 +6,15 @@ namespace undicht {
 
         SHARED_LIB_DEF_BASE_CLASS( Texture, createTexture, copyTexture, deleteTexture);
 
+        SHARED_LIB_API_IMPL(Texture::Texture()) {
+
+        }
+
+
+        SHARED_LIB_API_IMPL(Texture::~Texture()) {
+
+        }
+
         //////////////////////////////////////// managing the textures format /////////////////////////////////////
 
         SHARED_LIB_API_IMPL(void Texture::setPixelFormat(const core::BufferLayout& format)) {

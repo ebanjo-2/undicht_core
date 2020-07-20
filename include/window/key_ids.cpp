@@ -33,6 +33,7 @@ namespace undicht {
         int UND_KEY_Z;
 
         int UND_KEY_LSHIFT;
+        int UND_KEY_SPACE;
 
         // mouse buttons
         int UND_MOUSE_1; // left

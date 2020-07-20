@@ -118,7 +118,8 @@ namespace undicht {
 
                 gl33::Texture* real_texture = (gl33::Texture*)t.m_shared_lib_object;
 
-                if(real_texture->m_type && real_texture->m_id) {
+
+                if(real_texture && real_texture->m_type && real_texture->m_id) {
                     // binding the texture and setting the sampler uniform in the shader
                     real_texture->bind();
                     int texture_id = getTextureID(real_texture->m_name);
@@ -131,6 +132,9 @@ namespace undicht {
                     u.setName(real_texture->m_name);
                     loadUniform(u);
 
+                } else {
+
+                    EventLogger::storeNote(Note(UND_ERROR, "SHADER: ERROR: failed to load texture to shader: no type / id", UND_CODE_ORIGIN));
                 }
 
 

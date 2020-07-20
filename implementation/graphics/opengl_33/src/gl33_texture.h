@@ -26,8 +26,8 @@ namespace undicht {
                     int m_min_filter = -1;
                     int m_wrapping_method = -1;
 
-                    int m_pixel_layout; // like rgb, rgba
-                    int m_memory_format; // stores how big each component of the pixel is
+                    int m_pixel_layout = 0; // like rgb, rgba
+                    int m_memory_format = 0; // stores how big each component of the pixel is
 
                     std::string m_name; // uniform name
 

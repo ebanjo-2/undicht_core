@@ -163,6 +163,11 @@ namespace undicht {
                     return;
                 }
 
+                if(!m_type) {
+                    EventLogger::storeNote(Note(UND_ERROR, "TEXTURE:ERROR: texture to be bound has no type", UND_CODE_ORIGIN));
+                    return;
+                }
+
                 if(bound_textures[target] != m_id) {
 
                     glActiveTexture(GL_TEXTURE0 + target);
@@ -264,8 +269,14 @@ namespace undicht {
                     // dunno what to do
                 }
 
-                m_layout_set = true;
-                updateFormat();
+                if(m_pixel_layout && m_memory_format) {
+
+                    m_layout_set = true;
+                    updateFormat();
+                } else {
+
+                    EventLogger::storeNote(Note(UND_ERROR, "TEXTURE:ERROR: no known format", UND_CODE_ORIGIN));
+                }
 
             }
 
@@ -293,7 +304,7 @@ namespace undicht {
 
             //////////////////// functions to load a texture object from the shared lib  ////////////////////////////////////
 
-            SHARED_LIB_EXPORT implementation::Texture*createTexture() {
+            SHARED_LIB_EXPORT implementation::Texture* createTexture() {
                 return new gl33::Texture;
             }
 
@@ -306,6 +317,7 @@ namespace undicht {
                 }
 
                 *c_texture = *(Texture*)o;
+
             }
 
             SHARED_LIB_EXPORT void deleteTexture(implementation::Texture* object) {

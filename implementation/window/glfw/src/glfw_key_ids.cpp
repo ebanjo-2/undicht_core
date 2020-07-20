@@ -38,6 +38,7 @@ namespace undicht {
                 UND_KEY_Z = GLFW_KEY_Z;
 
                 UND_KEY_LSHIFT = GLFW_KEY_LEFT_SHIFT;
+                UND_KEY_SPACE = GLFW_KEY_SPACE;
 
             }
 

@@ -11,7 +11,12 @@ namespace undicht {
 
         SHARED_LIB_DECL_BASE_CLASS(Texture, TextureBase, createTexture, copyTexture, deleteTexture);
 
-        SHARED_LIB_CLASS(class Texture: public TextureBase{
+        SHARED_LIB_CLASS(class Texture: public TextureBase {
+
+        public:
+
+            Texture();
+            virtual ~Texture();
 
 
         public:

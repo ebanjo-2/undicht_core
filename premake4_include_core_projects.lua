@@ -11,6 +11,7 @@ project "core"
 	includedirs { "include" }
 	
 	configuration "debug - linux"
+		defines {"UND_DEBUG"}
 		links { "dl" }
 		flags { "Symbols" }
 		
@@ -19,6 +20,7 @@ project "core"
 		flags { "OptimizeSpeed", "OptimizeSize" }
 		
 	configuration "debug - windows"
+		defines {"UND_DEBUG"}
 		flags { "Symbols" }
 
 	configuration "release - windows"

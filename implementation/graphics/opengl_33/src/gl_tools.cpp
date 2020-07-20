@@ -11,7 +11,11 @@ namespace undicht {
 
         namespace gl33 {
 
+
             void undCheckGLError(const std::string& origin) {
+                /** calls glGetError and translates the error code into text form
+                * if not 0, the error get stored as a Note (UND_ERROR) */
+
                 unsigned int gl_error = glGetError();
 
                 if(gl_error)
