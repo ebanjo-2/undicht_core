@@ -36,7 +36,9 @@ namespace undicht {
 
 
         void Note::setStaticMessage(const std::string& message, int id) {
-            /** adds the message to the s_notes vector */
+            /** a note object can transport information about an error, warning, message
+            * common error codes (in form of an id) returned by external libraries can be automatically translated by this class
+            * if they are set as static messages associated with the id */
 
             if(s_notes.size() <= id ) {
                 s_notes.resize(id + 1);
@@ -46,16 +48,20 @@ namespace undicht {
 
         }
 
-        int Note::setStaticMessage(const std::string& message){
-            /** adds the message to the s_notes vector */
+        int Note::setStaticMessage(const std::string& message) {
+            /** a note object can transport information about an error, warning, message
+            * common error codes (in form of an id) returned by external libraries can be automatically translated by this class
+            * @return the id with which the message is associated */
+
             s_notes.push_back(message);
             return s_notes.size() - 1;
         }
 
         ///////////////////////////////////////////////////// changing and accessing the Note objects message ////////////////////////////////
 
-        /** the message transported will be in the s_notes vector at the id */
         void Note::setMessage(int id) {
+            /** the message transported will be in the s_notes vector at the id */
+
             m_message_id = id;
         }
 
@@ -102,7 +108,7 @@ namespace undicht {
             return m_message_id;
         }
 
-        const std::string& Note::getOrigin() const{
+        const std::string& Note::getOrigin() const {
 
             return m_origin;
         }

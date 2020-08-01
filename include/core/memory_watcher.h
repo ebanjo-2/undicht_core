@@ -9,8 +9,10 @@ namespace undicht {
     namespace core {
 
         class MemoryWatcher {
-                /** a class to be used by other classes carrying
-                * memory that needs to be deleted explicitly */
+                /** a class that gives an api to keep track of how many objects have access to some shared memory
+                * when the shared memory is first allocated, call createNewUserCount
+                * when the object using the shared memory no longer uses the data call deleteUser()
+                * if deleteUser() returns 0, the shared memory should be deallocated */
             public:
                 // storing the user count of every object
 

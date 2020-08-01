@@ -20,35 +20,43 @@ namespace undicht {
 
 
 
-
         class Note{
-                /** a note object can transport information about an error, warning, message  */
+                /** a note object can transport information about an error, warning, message
+                * common error codes (in form of an id) returned by external libraries can be automatically translated by this class
+                * if they are set as static messages associated with the id */
 
             private:
 
                 static std::vector<std::string> s_notes;
-                int m_message_id = -1;
-                bool m_delete_message = false; // whether the destructor should delete the message in s_event_messages
-                NOTE_TYPE m_type = UND_MESSAGE;
 
+                int m_message_id = -1; // a note can either store the message directly or as an id which can be used to retrieve the message string from s_notes
+                NOTE_TYPE m_type = UND_MESSAGE;
                 std::string m_message;
                 std::string m_origin; // the file & line from where the event originated
 
 
             public:
+                // setting static messages
 
-                /** adds the message to the s_event_messages vector */
+                /** a note object can transport information about an error, warning, message
+                * common error codes (in form of an id) returned by external libraries can be automatically translated by this class
+                * if they are set as static messages associated with the id */
                 static void setStaticMessage(const std::string& message, int id);
 
-                /** adds the message to the s_event_messages vector */
+                /** a note object can transport information about an error, warning, message
+                * common error codes (in form of an id) returned by external libraries can be automatically translated by this class
+                * @return the id with which the message is associated */
                 static int setStaticMessage(const std::string& message);
 
-                /** the message transported will be in the s_event_messages vector at the id */
+            public:
+
+                /** the message transported will be in the s_notes vector at the id */
                 void setMessage(int id);
                 void setMessage(const char* message);
                 void setMessage(char* message);
                 void setMessage(const std::string& message); // to transport temporary messages
 
+                /** the file & line from where the event originated */
                 void setOrigin(const std::string& origin);
                 void setType(NOTE_TYPE type);
 

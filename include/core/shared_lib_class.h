@@ -5,11 +5,17 @@
 #include <core/shared_lib_class.h>
 #include <functional>
 
-// the macro that creates two base classes (on in namespace default and one in implementation)
-// that default one manages the loading and deleting of shared lib objects for your class, the other one does nothing
-// create_class_name and delete_class_name need to be loaded from the shared lib in order for the class to work
-// copy_class_name also has to be loaded from the shared lib
-// it copies the object pointed to by the second param into the memory pointed to by the first param
+// the macro that creates two base classes (one in current and one in current::implementation)
+//
+// that current one manages the loading, copying and deleting of shared lib objects for your class
+// + forwards function calls to the shared lib object which has the type implementation::_class_name_
+//
+// so the class in implementation gives an api to the class in the current namespace with functions to forward function calls to
+// the functions are virtual, so that they can be implemented in the shared lib, by a class which inherits the implementation class
+//
+// create_class_name_, copy_class_name_ and delete_class_name_ need to be loaded from the shared lib in order for the class to work
+//
+// copy_class_name_ copies the object pointed to by the second param into the memory pointed to by the first param
 // so the first param has to be already pointing to an object loaded from the shared lib
 #define SHARED_LIB_DECL_BASE_CLASS(_class_name_, _class_name_Base, create_class_name_, copy_class_name_, delete_class_name_)                               \
                                                                                                                                                             \
@@ -39,9 +45,7 @@
 
 
 
-/** a class that can handle an object loaded from a shared lib
-* (create it in the constructor, delete in destructor, copy in operator=, ...*/
-// copying to be done!!!!
+
 
 namespace undicht {
 
@@ -50,41 +54,45 @@ namespace undicht {
 
         template <typename T, std::function<T*()>* create, std::function<void(T*,T*)>* copy, std::function<void(T*)>* destroy>
         class SharedLibClass {
+            /** a class that can handle an object loaded from a shared lib
+            * (create it in the constructor, delete in destructor, copy in operator=, ...*/
             public:
 
                 T* m_shared_lib_object = 0;
 
 
                 SharedLibClass() {
-                    //std::cout << "loading object" << "\n";
-                    m_shared_lib_object = (*create)();
 
+                    m_shared_lib_object = (*create)();
                 }
 
                 SharedLibClass(const SharedLibClass& original){
+
                     // reserving enough memory before copying into it
                     m_shared_lib_object = (*create)();
-                    *this = original; // should call the operator =
 
+                    *this = original; // should call the operator =
                 }
 
                 void operator= (const SharedLibClass& original){
-                    //std::cout << "copying object" << "\n";
+
                     (*copy)(m_shared_lib_object, original.m_shared_lib_object);
                 }
 
                 virtual ~SharedLibClass() {
 
-                    //std::cout << "deleting object" << "\n";
                     (*destroy)(m_shared_lib_object);
                 }
 
         };
 
 
-        // the one that does nothing :D
+        // used in the implementation namespace as the class the implementation class can inherit
+        // since it has to inherit from the _class_name_Base,
+        // because it shares the same declaration as the class which implements SharedLibClass<_class_name_> through _class_name_Base
         class EmptySharedLibClass {
             public:
+                // the one that does nothing :D
         };
 
 
