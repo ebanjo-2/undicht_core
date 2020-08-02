@@ -8,10 +8,12 @@ namespace undicht {
 
         SHARED_LIB_DECL_BASE_CLASS(SoundSource, SoundSourceBase, createSoundSource, copySoundSource, deleteSoundSource);
 
-        SHARED_LIB_CLASS(class SoundSource: public SoundSourceBase{
-
+        SHARED_LIB_CLASS(class SoundSource: public SoundSourceBase {
+            /** a class that stores and plays a sound */
             public:
 
+                /** stores the data in the buffer
+                * @param format: see core/types.h for options */
                 virtual void setData(const char* data, int byte_size, int format, int sample_rate);
 
                 /** stores the data in the references

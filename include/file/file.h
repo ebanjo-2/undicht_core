@@ -10,7 +10,7 @@ namespace undicht {
         SHARED_LIB_DECL_BASE_CLASS(File, FileBase, createFile, copyFile, deleteFile);
 
         SHARED_LIB_CLASS(class File: public FileBase {
-
+        /** a class that provides an api for using files */
         public:
             // opening / closing files
 
