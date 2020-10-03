@@ -7,3 +7,6 @@
 [submodule "vendor/openal"]
 	path = vendor/openal
 	url = https://github.com/ebanjo-2/openal
+[submodule "vendor/EGL-Registry"]
+	path = vendor/EGL-Registry
+	url = https://github.com/ebanjo-2/EGL-Registry.git
